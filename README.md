@@ -4,5 +4,6 @@
 ** work in progress**
 
 A few screenshots showing the progress bar and buttons that change when clicked.
-![](example1.PNG)  
-![](example2.PNG)
+![](example3.PNG)  
+![](example4.PNG) 
+![](example5.PNG) 
