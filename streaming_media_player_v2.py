@@ -92,8 +92,10 @@ window = sg.Window('VLC Video Player', layout, finalize=True)
 # ----- VLC PLAYER ------------------------------------------------------------------------------ #
 Instance = vlc.Instance()
 player = Instance.media_player_new()
-h = window['VIDEO'].Widget.winfo_id()
-player.set_hwnd(h)
+
+# set where media player should render output
+out_element = window['VIDEO'].Widget.winfo_id()
+player.set_hwnd(out_element)
 
 def setup_player(player, media, window):
     media = Instance.media_new(str(media))
