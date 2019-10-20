@@ -2,20 +2,25 @@
     Media Player for local and streaming online videos
 
     Author:     Israel Dryer, israel.dryer@gmail.com
-    Modified:   10/19/2019
+    Modified:   10/20/2019
+
+    This player is currently only setup to work on Windows. However, I may make this cross-platform 
+    compatable in the future.
 
     * source of free icons and buttons
         - https://icons8.com/icon/pack/media-controls/ios-filled
     
     * Make sure the VLC install matches the Python version (32/64 bit)
-        - pip install --upgrade youtube-dl
         - https://get.videolan.org/vlc/3.0.8/win64/vlc-3.0.8-win64.exe
+    
+    * You may need to upgrade the following library for YouTube streaming
+        - pip install --upgrade youtube-dl        
 
-    * default image source
+    * Source I used for the background image (default.png)
         -https://pngtree.com/so/accessory
 
-    I have a script in the directory that you can use to convert your images to a base64 byte string. 
-    There's also an online tool: https://base64.guru/converter/encode/image/ico
+    * There's an online tool you can use to encode base64 images.
+        - https://base64.guru/converter/encode/image/ico
 """
 import PySimpleGUI as sg
 import vlc
@@ -77,17 +82,16 @@ def Btn(key, image):
 
 sg.set_global_icon(ICON.decode())
 
-menu = [['&File', ['O&pen File', 'Open &Stream', '---', '&Play', '&Stop', '&Mute', '---', '&Exit']]]
+rcmenu = ['&File', ['O&pen Local File', 'Open &YouTube Stream', '---', '&Play', '&Stop', '&Mute', '---', '&Exit']]
 
-layout = [[sg.Menu(menu)],
-          [sg.Text('Open a FILE or STREAM to begin', font=(sg.DEFAULT_FONT, 10), size=(70,1), key='INFO')],
+layout = [[sg.Text('(Right-Click) Open a FILE or STREAM to begin', font=(sg.DEFAULT_FONT, 8), size=(70,1), key='INFO')],
           [sg.Image(data=DEFAULT_IMG, size=VIDEO_SIZE, key='VIDEO')],
           [sg.ProgressBar(size=(58, 15), max_value=(100), bar_color=('#F95650', '#D8D8D8'), orientation='h', key='TIME')],
           [Btn('REWIND', REWIND), Btn('PAUSE', PAUSE_OFF),
            Btn('PLAY', PLAY_OFF), Btn('STOP', STOP),
            Btn('FORWARD', FORWARD), Btn('SOUND', SOUND_ON)]]
 
-window = sg.Window('VLC Video Player', layout, finalize=True)
+window = sg.Window('VLC Video Player', layout, right_click_menu=rcmenu, finalize=True)
 
 # ----- VLC PLAYER ------------------------------------------------------------------------------ #
 Instance = vlc.Instance()
@@ -128,11 +132,11 @@ while True:
     if event in ('SOUND', 'Mute'):
         window['SOUND'].update(image_data = SOUND_ON if player.audio_get_mute() else SOUND_OFF)
         player.audio_set_mute(not player.audio_get_mute())
-    if event == 'Open Stream':
+    if event == 'Open YouTube Stream':
         media = get_stream(window)
         if media is not None:
             setup_player(player, media, window)
-    if event == 'Open File':
+    if event == 'Open Local File':
         media = get_local_file()
         if media is not None:
             setup_player(player, media, window)
