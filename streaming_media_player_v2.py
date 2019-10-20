@@ -21,7 +21,6 @@ import PySimpleGUI as sg
 import vlc
 import pafy
 
-
 # ------ MISC DEFAULT SETTINGS ------------------------------------------------------------------ #
 DEFAULT_URL = 'https://www.youtube.com/watch?v=jE-SpRI3K5g'
 PATH = './images/'
@@ -57,7 +56,6 @@ def get_local_file():
         window['PLAY'].update(image_data = PLAY_ON)        
     return filename
 
-
 def get_stream(window):
     ''' get streaming video from url '''
     try:
@@ -70,7 +68,6 @@ def get_stream(window):
         return best.url
     except:
         return None
-
 
 # ----- GUI ---------------------------------------------------------------- #
 def Btn(key, image):
@@ -92,7 +89,6 @@ layout = [[sg.Menu(menu)],
 
 window = sg.Window('VLC Video Player', layout, finalize=True)
 
-
 # ----- VLC PLAYER ------------------------------------------------------------------------------ #
 Instance = vlc.Instance()
 player = Instance.media_player_new()
@@ -103,7 +99,6 @@ def setup_player(player, media, window):
     media = Instance.media_new(str(media))
     player.set_media(media)
     player.play()
-
 
 # ----- MAIN EVENT LOOP-------------------------------------------------------------------------- #
 while True:
@@ -122,35 +117,21 @@ while True:
         window['PAUSE'].update(image_data = PAUSE_OFF)
         window['TIME'].update_bar(current_count=player.get_time(), max=player.get_length())
     if event == 'PAUSE':
-        if player.is_playing():
-            window['PAUSE'].update(image_data = PAUSE_ON)
-            window['PLAY'].update(image_data = PLAY_OFF)        
-        else:
-            window['PAUSE'].update(image_data = PAUSE_OFF)
-            window['PLAY'].update(image_data = PLAY_ON)        
+        window['PAUSE'].update(image_data = PAUSE_ON if player.is_playing() else PAUSE_OFF)
+        window['PLAY'].update(image_data = PLAY_OFF if player.is_playing() else PLAY_ON)        
         player.pause()
     if event == 'REWIND':
-        pos = player.get_position()
-        player.set_position(max(0, pos - 0.02))
+        player.set_position(max(0, player.get_position() - 0.02))
     if event == 'FORWARD':
-        pos = player.get_position()
-        player.set_position(min(1, pos + 0.02))        
+        player.set_position(min(1, player.get_position() + 0.02))        
     if event in ('SOUND', 'Mute'):
-        if player.audio_get_mute():
-            player.audio_set_mute(False)
-            window['SOUND'].update(image_data = SOUND_ON)
-        else:
-            player.audio_set_mute(True)
-            window['SOUND'].update(image_data = SOUND_OFF)            
+        window['SOUND'].update(image_data = SOUND_ON if player.audio_get_mute() else SOUND_OFF)
+        player.audio_set_mute(not player.audio_get_mute())
     if event == 'Open Stream':
         media = get_stream(window)
-        if media is None:
-            continue
-        else:
+        if media is not None:
             setup_player(player, media, window)
     if event == 'Open File':
         media = get_local_file()
-        if media is None:
-            continue
-        else:
+        if media is not None:
             setup_player(player, media, window)
