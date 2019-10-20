@@ -81,8 +81,8 @@ Instance = vlc.Instance()
 player = Instance.media_player_new()
 
 # set where media player should render output
-out_element = window['VIDEO'].Widget.winfo_id()
-player.set_hwnd(out_element)
+video_widget_id = window['VIDEO'].Widget.winfo_id()
+player.set_hwnd(video_widget_id)
 
 def setup_player(player, media, window):
     media = Instance.media_new(str(media))
@@ -95,6 +95,7 @@ while True:
     window['TIME'].update_bar(current_count=player.get_time(), max=player.get_length())
 
     if event in(None, 'Exit'):
+        player.audio_set_mute(False)
         break
     if event in ('STOP', 'Stop'):
         player.stop()
