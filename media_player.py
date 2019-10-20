@@ -8,6 +8,12 @@
 import PySimpleGUI as sg
 import vlc
 import pafy
+from sys import platform as PLATFORM
+
+# ------ CHECK OS ------------------------------------------------------------------------------- #
+_isMacOS   = PLATFORM.startswith('darwin')
+_isWindows = PLATFORM.startswith('win')
+_isLinux = PLATFORM.startswith('linux')
 
 # ------ MISC DEFAULT SETTINGS ------------------------------------------------------------------ #
 DEFAULT_URL = 'https://www.youtube.com/watch?v=jE-SpRI3K5g'
@@ -77,12 +83,18 @@ layout = [[sg.Text('(Right-Click) Open a FILE or STREAM to begin', font=(sg.DEFA
 window = sg.Window('VLC Video Player', layout, right_click_menu=rcmenu, finalize=True)
 
 # ----- VLC PLAYER ------------------------------------------------------------------------------ #
-Instance = vlc.Instance()
+args = []
+if _isLinux:
+    args.append('--no-xlib')
+Instance = vlc.Instance(args)
 player = Instance.media_player_new()
 
 # set where media player should render output
 video_widget_id = window['VIDEO'].Widget.winfo_id()
-player.set_hwnd(video_widget_id)
+if _isWindows:
+    player.set_hwnd(video_widget_id)
+else:
+    player.set_xwindow(video_widget_id)
 
 def setup_player(player, media, window):
     media = Instance.media_new(str(media))
