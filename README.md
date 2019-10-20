@@ -5,8 +5,19 @@ A streaming media player built with PySimpleGUI that will play local music and v
 ![](images/examples/example9.PNG) 
 
 
-This player is currently only setup to work on Windows. However, I may make this cross-platform 
-compatable in the future.
+This works on Windows and Linux (as far as I can tell). I don't have a Mac... so if someone else wants to build support for that.. be my guest.  
+
+A screenshot of the program running on a Raspberry Pi 3B+, Python 3.7.  
+![](images/examples/example10_rpi_buster.PNG)
+
+This is what you'll need for the Linux distro:  
+```
+sudo pip install python-vlc
+sudo pip install pafy
+sudo apt-get install vlc
+sudo pip install --upgrade youtube-dl
+sudo pip install --upgrade pysimplegui
+```
 
 My source for free icons and buttons   
 https://icons8.com/icon/pack/media-controls/ios-filled
