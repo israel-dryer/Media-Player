@@ -102,9 +102,8 @@ def setup_player(player, media, window):
 
 # ----- MAIN EVENT LOOP-------------------------------------------------------------------------- #
 while True:
-    event, values = window.read(timeout=0)
+    event, values = window.read(timeout=1000)
     window['TIME'].update_bar(current_count=player.get_time(), max=player.get_length())
-    player.set_hwnd(h)
 
     if event in(None, 'Exit'):
         break
