@@ -69,18 +69,19 @@ def Btn(key, image):
     return sg.Button(image_data=image, border_width=0, key=key, 
                      button_color=('white', DEFAULT_BG_COLOR))
 
-sg.set_global_icon(ICON.decode())
-
 rcmenu = ['&File', ['O&pen Local File', 'Open &YouTube Stream', '---', '&Play', '&Stop', '&Mute', '---', '&Exit']]
 
 layout = [[sg.Text('(Right-Click) Open a FILE or STREAM to begin', font=(sg.DEFAULT_FONT, 8), size=(70,1), key='INFO')],
           [sg.Image(data=DEFAULT_IMG, size=VIDEO_SIZE, key='VIDEO')],
-          [sg.ProgressBar(size=(58, 15), max_value=(100), bar_color=('#F95650', '#D8D8D8'), orientation='h', key='TIME')],
+          [sg.ProgressBar(size=(48, 15), max_value=(100), bar_color=('#F95650', '#D8D8D8'), orientation='h', key='TIME')],
           [Btn('REWIND', REWIND), Btn('PAUSE', PAUSE_OFF),
            Btn('PLAY', PLAY_OFF), Btn('STOP', STOP),
            Btn('FORWARD', FORWARD), Btn('SOUND', SOUND_ON)]]
 
 window = sg.Window('VLC Video Player', layout, right_click_menu=rcmenu, finalize=True)
+
+if _isWindows:
+    window.set_icon(icon=ICON.decode())
 
 # ----- VLC PLAYER ------------------------------------------------------------------------------ #
 args = []
