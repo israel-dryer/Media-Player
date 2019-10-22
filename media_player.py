@@ -1,9 +1,7 @@
 """
     Media Player for local and streaming online videos
-
     Author:     Israel Dryer, israel.dryer@gmail.com
-    Modified:   10/20/2019
-
+    Modified:   10/21/2019
 """
 import PySimpleGUI as sg
 import vlc
