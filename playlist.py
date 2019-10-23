@@ -39,17 +39,23 @@ while True:
         except:
             continue
     if event == 'UP':
-        ix = playlist.index(values['PLAYLIST'].pop())
-        pos = max(ix-1, 0)
-        item = playlist.pop(ix)
-        playlist.insert(pos, item)
-        window['PLAYLIST'].update(values=playlist, set_to_index=pos)            
+        try:
+            ix = playlist.index(values['PLAYLIST'].pop())
+            pos = max(ix-1, 0)
+            item = playlist.pop(ix)
+            playlist.insert(pos, item)
+            window['PLAYLIST'].update(values=playlist, set_to_index=pos)            
+        except:
+            continue
     if event == 'DOWN':
-        ix = playlist.index(values['PLAYLIST'].pop())
-        pos = min(ix + 1, len(playlist)-1)
-        item = playlist.pop(ix)
-        playlist.insert(pos, item)
-        window['PLAYLIST'].update(values=playlist, set_to_index=pos)     
+        try:
+            ix = playlist.index(values['PLAYLIST'].pop())
+            pos = min(ix + 1, len(playlist)-1)
+            item = playlist.pop(ix)
+            playlist.insert(pos, item)
+            window['PLAYLIST'].update(values=playlist, set_to_index=pos)     
+        except:
+            continue
     if event == 'Submit':
         sg.popup_ok('Playlist added to media player')       
         break 
