@@ -11,7 +11,7 @@ I'm working on a playlist builder. It currently launches, and works as far as bu
 
 This works on Windows and Linux (as far as I can tell). I don't have a Mac... so if someone else wants to build support for that.. be my guest.  
 
-A screenshot of the program running on a Raspberry Pi 3B+, Python 3.7.  
+A screenshot of an ealier version running on a Raspberry Pi 3B+, Python 3.7.  
 
 ![](images/examples/example10_rpi_buster.PNG)
 
