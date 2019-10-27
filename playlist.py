@@ -30,9 +30,12 @@ def get_media_info(url):
 def show_library(library, window, playlist):
     """ add playlist item from library """
     def create_layout():
-        layout = [[sg.Text('Click all that you wish to add to the playlist.....\n', font=(sg.DEFAULT_FONT, 12, 'bold'))]]
-        for vid in library:
-            layout.append([sg.Checkbox(vid.title, tooltip=vid.channel, font=(sg.DEFAULT_FONT, 12), pad=(0, 0))])
+        layout = [[sg.Text('Selected items will be added to the playlist.....\n', font=(sg.DEFAULT_FONT, 10))]]
+        for i, vid in enumerate(library):
+            #layout.append([sg.Checkbox(vid.title, tooltip=vid.channel, font=(sg.DEFAULT_FONT, 12), pad=(0, 0))])
+            layout.append([sg.Check('', pad=(0, 0)), 
+                           sg.Input(vid.channel, pad=(0, 0), size=(20, 1), key=f'C{i}'), 
+                           sg.Input(vid.title, pad=(0, 0), size=(60, 1), key=f'T{i}')])
         layout.append([sg.Text(' ')])
         layout.append([btn('ok', 'OK'), btn('cancel', 'CANCEL')])            
         return layout 
@@ -43,8 +46,9 @@ def show_library(library, window, playlist):
     if lib_event == 'CANCEL':
         lib_window.close()
     if lib_event == 'OK':
+        print(lib_values)
         for key, val in lib_values.items():
-            if val:
+            if val and isinstance(val, int):
                 video = library[key].title
                 playlist.append(video)
                 pos = len(playlist)-1
@@ -56,7 +60,7 @@ def move_up(window, values):
     """ move video track to an earlier position """
     try:
         # lookup index of selected track
-        ix = playlist.index(values['PLAYLIST'].pop())
+        ix = window['PLAYLIST'].get_indexes()[0]
         # remove item from current position and move up        
         pos = max(ix-1, 0)
         item = playlist.pop(ix)
@@ -73,7 +77,7 @@ def move_down(window, values):
         ix = window['PLAYLIST'].get_indexes()[0]
         # remove item from current position and move down
         item = playlist.pop(ix)
-        pos = min(ix + 1, len(playlist)-1)
+        pos = min(ix + 1, len(playlist))
         playlist.insert(pos, item)
         window['PLAYLIST'].update(values=playlist, set_to_index=pos)     
     except:
