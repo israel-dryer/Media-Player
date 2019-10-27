@@ -8,6 +8,12 @@ import pafy
 from collections import namedtuple
 import pickle
 
+THEME = 'DarkBlue'
+sg.change_look_and_feel(THEME)
+DEFAULT_BG_COLOR = sg.LOOK_AND_FEEL_TABLE[THEME]['BACKGROUND']
+print(DEFAULT_BG_COLOR)
+IMG_PATH = './images/button_images/square_white/'
+
 Video = namedtuple("Video", "channel title url")
 
 # ----- LOAD MEDIA LIBRARY AND PLAYLIST --------------------------------------#
@@ -34,13 +40,13 @@ def show_library(library, window, playlist):
         for i, vid in enumerate(library):
             #layout.append([sg.Checkbox(vid.title, tooltip=vid.channel, font=(sg.DEFAULT_FONT, 12), pad=(0, 0))])
             layout.append([sg.Check('', pad=(0, 0)), 
-                           sg.Input(vid.channel, pad=(0, 0), size=(20, 1), key=f'C{i}'), 
-                           sg.Input(vid.title, pad=(0, 0), size=(60, 1), key=f'T{i}')])
+                           sg.Input(vid.channel, pad=(0, 0), size=(20, 1), font=(sg.DEFAULT_FONT, 12), key=f'C{i}'), 
+                           sg.Input(vid.title, pad=(0, 0), size=(60, 1), font=(sg.DEFAULT_FONT, 12), key=f'T{i}')])
         layout.append([sg.Text(' ')])
-        layout.append([btn('ok', 'OK'), btn('cancel', 'CANCEL')])            
+        layout.append([btn('ok', 'OK')])            
         return layout 
 
-    lib_window = sg.Window('Media Library', create_layout())
+    lib_window = sg.Window('Media Library', create_layout(), grab_anywhere=True)
     lib_event, lib_values = lib_window.read()
 
     if lib_event == 'CANCEL':
@@ -104,7 +110,7 @@ def add_video(window, values):
         # append to end of list
         pos = len(playlist)-1
     # user input url
-    url = sg.popup_get_text('YouTube URL:')
+    url = sg.popup_get_text(title='Add YouTube Video', message='Input a YouTube video url')
     if url is None:
         return
     # download video meta data
@@ -120,19 +126,19 @@ def add_video(window, values):
 # ----- PLAYLIST GUI -------------------------------------------------------- #
 def btn(image, key): 
     """ create button with images for layout """
-    filename = './images/button_images/' + image + '.png'
-    return sg.Button(image_filename=filename, button_color=('white', sg.DEFAULT_BACKGROUND_COLOR), 
+    filename = IMG_PATH + image + '.png'
+    return sg.Button(image_filename=filename, button_color=('white', DEFAULT_BG_COLOR),
         border_width=0, pad=(1,1), key=key)
 
 
 def create_window():
-    col1 = [[btn('plus2', 'PLUS'), btn('minus2', 'MINUS'), btn('up2', 'UP'), btn('down2', 'DOWN'), 
-             btn('ok', 'OK'), btn('cancel', 'CANCEL'), btn('library','LIBRARY')]]
+    col1 = [[btn('plus', 'PLUS'), btn('minus', 'MINUS'), btn('up', 'UP'), btn('down', 'DOWN'), 
+             btn('library','LIBRARY'), btn('ok', 'OK'), btn('cancel', 'CANCEL')]]
     col2 = [[sg.Listbox(playlist, key='PLAYLIST', pad=(5, 0), font=(sg.DEFAULT_FONT, 12), size=(70, 10))]]
 
     layout = [[sg.Col(col1, pad=(0, 0))], [sg.Col(col2, pad=(0, 10))]]
 
-    window = sg.Window('Media Player :: Build Playlist', layout, margins=(1, 1))
+    window = sg.Window('Media Player :: Build Playlist', layout, grab_anywhere=True, margins=(5, 5))
     return window
 
 
