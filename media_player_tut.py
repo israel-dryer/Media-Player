@@ -96,7 +96,7 @@ def gui():
               [sg.ProgressBar(size=(48, 15), max_value=(100), bar_color=('#F95650', '#D8D8D8'), orientation='h', key='TIME')],
               [btn('REWIND', BUTTONS['REWIND']), btn('PAUSE', BUTTONS['PAUSE_OFF']),
                btn('PLAY', BUTTONS['PLAY_OFF']), btn('STOP', BUTTONS['STOP']),
-               btn('FORWARD', BUTTONS['FORWARD']), btn('SOUND', BUTTONS['SOUND_ON'])]]
+               btn('FORWARD', BUTTONS['FORWARD']), btn('SOUND', BUTTONS['SOUND_ON']), btn('PLAYLIST', BUTTONS['PLAYLIST'])]]
     
     window = sg.Window('VLC Video Player', layout, right_click_menu=rcmenu, finalize=True)
     
