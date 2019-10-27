@@ -24,13 +24,13 @@ WINDOW_SIZE = (1280, 720)
 SCALE = 0.5
 VIDEO_SIZE = tuple([x * SCALE for x in WINDOW_SIZE])
 
-THEME = 'SystemDefault'
+THEME = 'DarkBlue'
 sg.change_look_and_feel(THEME)
 DEFAULT_BG_COLOR = sg.LOOK_AND_FEEL_TABLE[THEME]['BACKGROUND']
 
 # ------ IMAGES --------------------------------------------------------------------------------- #
 PATH = './images/'
-BUTTONS = {img[:-4].upper(): PATH + 'button_images/' + img for img in listdir(PATH + 'button_images')}
+BUTTONS = {img[:-4].upper(): PATH + 'button_images/square_white/' + img for img in listdir(PATH + 'button_images')}
 DEFAULT_IMG = PATH + 'default.png'
 ICON = PATH + 'player.ico'
 
