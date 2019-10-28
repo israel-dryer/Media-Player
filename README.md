@@ -1,13 +1,17 @@
 # Media-Player (in progress)
 A streaming media player built with PySimpleGUI that will play local music and video files, and also streaming YouTube videos.
 
-![](images/examples/example8.PNG)  
-![](images/examples/example9.PNG) 
+![](images/examples/example11.PNG)  
+![](images/examples/example12.PNG) 
+
+I'm working on a playlist builder. It currently launches, and works as far as building goes, but it's not yet connected for playing videos.  
+
+![](images/examples/example13.PNG) 
 
 
 This works on Windows and Linux (as far as I can tell). I don't have a Mac... so if someone else wants to build support for that.. be my guest.  
 
-A screenshot of the program running on a Raspberry Pi 3B+, Python 3.7.  
+A screenshot of an ealier version running on a Raspberry Pi 3B+, Python 3.7.  
 
 ![](images/examples/example10_rpi_buster.PNG)
 
