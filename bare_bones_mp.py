@@ -1,55 +1,58 @@
 """
     Bare Bones YouTube Player Demo with Playlist
     Author      :   Israel Dryer
-    Modified    :   2019-10-28
+    Modified    :   2019-10-30
 """
 import PySimpleGUI as sg 
 import vlc
 sg.change_look_and_feel('DarkBlue')
 
-layout = [[sg.Input(default_text='Add URL to Playlist: ', key='NEW'), sg.Submit()],
-          [sg.Image('', size=(530, 300), key='VID_OUT')],
-          [sg.Button('Play', size=(7, 1)), sg.Button('Pause', size=(7, 1)), 
-           sg.Button('Stop', size=(7, 1)), sg.Button('Previous', size=(7, 1)), 
-           sg.Button('Next', size=(7, 1)),
-           sg.Text('Seconds remaining:', key='TIME', size=(15, 1))]]
+# media player gui
+def btn(name):
+    return sg. Button(name, size=(6, 1), pad=(1, 1), key=name.upper())
 
-window = sg.Window('Mini Player', layout, finalize=True)
+layout = [[sg.Input(default_text='Video URL or Local Path:', size=(30, 1), key='NEW'), sg.Submit(key='SUBMIT')],
+          [sg.Image('', size=(300, 170), key='VID_OUT')],
+          [btn('previous'), btn('play'), btn('next'), btn('pause'), btn('stop')],
+          [sg.Text('Load media to start', key='TIME')]]
 
-playlist = ['https://www.youtube.com/watch?v=mqhxxeeTbu0', 'https://www.youtube.com/watch?v=9Hb2oMlRI0I']
+window = sg.Window('Mini Player', layout, element_justification='center', finalize=True)
 
-def new_player(window):
-    inst = vlc.Instance()
-    list_player = inst.media_list_player_new()
-    media_list = inst.media_list_new(playlist)
-    list_player.set_media_list(media_list)
-    player = list_player.get_media_player()
-    player.set_hwnd(window['VID_OUT'].Widget.winfo_id())
-    return player, list_player
+# media player object
+inst = vlc.Instance()
+list_player = inst.media_list_player_new()
+media_list = inst.media_list_new([])
+list_player.set_media_list(media_list)
+player = list_player.get_media_player()
+player.set_hwnd(window['VID_OUT'].Widget.winfo_id())
 
-player, list_player = new_player(window)
-
+# main event loop
 while True:
-    event, values = window.read(timeout=100)
-
-    length = round(player.get_length()/1000, 0)
-    elapsed = round(player.get_position() * length, 0)
+    event, values = window.read(timeout=1000)
 
     if event is None:
         break
-    if event == 'Play':
+    if event == 'PLAY':
         list_player.play()
-    if event == 'Pause':
+    if event == 'PAUSE':
         list_player.pause()
-    if event == 'Stop':
+    if event == 'STOP':
         list_player.stop()
-    if event == 'Next':
+    if event == 'NEXT':
         list_player.next()
-    if event == 'Previous':
+    if event == 'PREVIOUS':
         list_player.previous()
-    if event == 'Submit':
-        player.stop()
-        playlist.insert(0, values['NEW'])
-        player, list_player = new_player(window)
+    if event == 'SUBMIT':
+        vid = values['NEW']
+        if not 'Video URL' in vid: 
+            media_list.add_media(vid)
+            window['NEW'].update(value = 'Video URL or Local Path:') # only add a legit submit
 
-    window['TIME'].update(value = "Elapsed: {:,.0f} / {:,.0f}".format(elapsed, length))
+    # update elapsed time if there is a video loaded and the player is playing
+    elapsed = "{:02d}:{:02d} / {:02d}:{:02d}".format(*divmod(player.get_time()//1000, 60), *divmod(player.get_length()//1000, 60))
+    if player.is_playing():
+        window['TIME'].update(value = elapsed)
+    elif media_list.count() == 0:
+        window['TIME'].update(value = 'Load media to start')
+    else:
+        window['TIME'].update(value = 'Ready to play media')
