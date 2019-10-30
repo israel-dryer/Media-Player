@@ -55,13 +55,13 @@ while True:
         if not 'Video URL' in vid and vid != '': 
             media_list.add_media(vid)
             list_player.set_media_list(media_list)
-            window['NEW'].update(value = 'Video URL or Local Path:') # only add a legit submit
+            window['NEW'].update('Video URL or Local Path:') # only add a legit submit
 
     # update elapsed time if there is a video loaded and the player is playing
     elapsed = "{:02d}:{:02d} / {:02d}:{:02d}".format(*divmod(player.get_time()//1000, 60), *divmod(player.get_length()//1000, 60))
     if player.is_playing():
-        window['TIME'].update(value = elapsed)
+        window['TIME'].update(elapsed)
     elif media_list.count() == 0:
-        window['TIME'].update(value = 'Load media to start')
+        window['TIME'].update('Load media to start')
     else:
-        window['TIME'].update(value = 'Ready to play media')
+        window['TIME'].update('Ready to play media')
