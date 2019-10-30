@@ -26,8 +26,8 @@ list_player = inst.media_list_player_new()
 media_list = inst.media_list_new([])
 list_player.set_media_list(media_list)
 player = list_player.get_media_player()
-if PLATFORM.startswith('linus'):
-    player.set_xwindow(window['VID_OUT'].Widget.winfo_id)
+if PLATFORM.startswith('linux'):
+    player.set_xwindow(window['VID_OUT'].Widget.winfo_id())
 else:
     player.set_hwnd(window['VID_OUT'].Widget.winfo_id())
 
