@@ -1,5 +1,7 @@
 """
     Bare Bones Media Player with Playlist
+    Uses the VLC player to playback local files and YouTube streams.
+    
     Author      :   Israel Dryer
     Modified    :   2019-10-30
 """
