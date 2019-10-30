@@ -40,12 +40,16 @@ while True:
         list_player.stop()
     if event == 'NEXT':
         list_player.next()
+        list_player.play()
     if event == 'PREVIOUS':
-        list_player.previous()
+        list_player.previous() 
+        list_player.previous() # 2 calls needed to get to prior??
+        list_player.play()
     if event == 'SUBMIT':
         vid = values['NEW']
         if not 'Video URL' in vid: 
             media_list.add_media(vid)
+            list_player.set_media_list(media_list)
             window['NEW'].update(value = 'Video URL or Local Path:') # only add a legit submit
 
     # update elapsed time if there is a video loaded and the player is playing
