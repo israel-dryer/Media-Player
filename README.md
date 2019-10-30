@@ -5,7 +5,7 @@ There currently two versions of the media-player. A bare-bones **mini-player** a
 
 
 ## Mini-Player
-This is a minimalist player that can play both local and online media files (ex. YouTube). This works on both Linux and Windows. Haven't tried Mac, but let me know...  
+This is a minimalist player that can play both local and online media files (ex. YouTube). Click the LOAD button will load the file or link into a playlist, which you can then traverse with the PREVIOUS and NEXT buttons. This works on both Linux and Windows. Haven't tried Mac, but let me know...  
 
 Getting start with Linux:  
 ```
