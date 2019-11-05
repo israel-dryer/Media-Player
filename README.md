@@ -27,7 +27,7 @@ https://get.videolan.org/vlc/3.0.8/win64/vlc-3.0.8-win64.exe
 
 
 Here are examples on **Linux** (left) and **Windows** (right)   
-![](images/examples/mini_player1.PNG) ![](images/examples/mini_player2.PNG)
+![](images/examples/mini_player4.PNG) ![](images/examples/mini_player3.PNG)
 
 
 ## Standard Player (in progress)
