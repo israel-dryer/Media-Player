@@ -12,12 +12,14 @@ Getting start with Linux:
 sudo pip3 install python-vlc
 sudo pip3 install youtube-dl
 sudo pip3 install pysimplegui
+sudo pip3 install pafy
 sudo apt-get install vlc
 ```
 
 Getting start with Windows:
 ```
 pip install python-vlc
+pip install pafy
 pip install youtube-dl
 pip install pysimplegui
 ```
