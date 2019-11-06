@@ -3,7 +3,7 @@
     Uses the VLC player to playback local files and YouTube streams.
     
     Author      :   Israel Dryer
-    Modified    :   2019-11-4
+    Modified    :   2019-11-5
 """
 import vlc
 import pafy
@@ -16,7 +16,11 @@ sg.change_look_and_feel('DarkBlue')
 def btn(name):
     return sg. Button(name, size=(6, 1), pad=(1, 1), key=name.upper())
 
-layout = [[sg.Input(default_text='Video URL or Local Path:', size=(30, 1), key='NEW'), btn('load')],
+menu = [['Playlist', []], ['Exit']]
+tracks = menu[0][1]
+
+layout = [[sg.Menu(menu, key='MENU')],
+          [sg.Input(default_text='Video URL or Local Path:', size=(30, 1), key='NEW'), btn('load')],
           [sg.Image('', size=(300, 170), key='VID_OUT')],
           [btn('previous'), btn('play'), btn('next'), btn('pause'), btn('stop')],
           [sg.Text('Load media to start', size=(40, 2), justification='center', font=(sg.DEFAULT_FONT, 10), key='TIME')]]
@@ -34,7 +38,7 @@ if PLATFORM.startswith('linux'):
 else:
     player.set_hwnd(window['VID_OUT'].Widget.winfo_id())
 
-def add_media(url, media_list=media_list, instance=inst):
+def add_media(url, window=window, media_list=media_list, instance=inst):
     """ add media to media_list player """
     vid = pafy.new(url)
     best = vid.getbest()
@@ -44,6 +48,8 @@ def add_media(url, media_list=media_list, instance=inst):
     media.set_meta(6, vid.description)
     media.set_meta(10, url)
     media_list.add_media(media)
+    menu[0][1].append(vid.title)
+    window['MENU'].update(menu_definition=menu)
 
 def get_meta(type: int, player=player) -> str:
     """ retrieve meta data on currently playing item """
@@ -58,7 +64,7 @@ def get_meta(type: int, player=player) -> str:
 while True:
     event, values = window.read(timeout=1000)
 
-    if event is None:
+    if event in (None, 'Exit'):
         break
     if event == 'PLAY':
         list_player.play()
@@ -78,6 +84,8 @@ while True:
         if not 'Video URL' in vid and vid != '': 
             add_media(values['NEW'])
             window['NEW'].update('Video URL or Local Path:') # only add a legit submit
+    if event in tracks:
+        list_player.play_item_at_index(tracks.index(event))
 
     # show channel, title, and elasped time if there is a video loaded and the player is playing
     elapsed = "{:02d}:{:02d} / {:02d}:{:02d}".format(*divmod(player.get_time()//1000, 60), *divmod(player.get_length()//1000, 60))
