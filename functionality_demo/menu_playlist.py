@@ -13,19 +13,19 @@ menu = [['File', ['Exit']],
                       'Track3',['Delete::Track3', '---', 'Move Up::Track3', 'Move Down::Track3']]]]
 
 layout = [[sg.Menu(menu, key='MENU')],
+          [sg.Input('enter track name', size=(25, 1), key='TRACK')],
           [sg.Button('Add Track', pad=(25, 25), size=(20, 2))]]
 
-window = sg.Window('Menu Playlist App', layout)
+window = sg.Window('Menu Playlist App', layout, element_justification='center')
 
 def tracks_list(menu):
     """ get a list of tracks from the playlist menu """
     playlist = menu[1][1]
     return [track for track in playlist if isinstance(track, str)]
 
-def track_add(window, trackcnt):
-    trackname = 'Track' + str(next(trackcnt))
-    trackmenu = [f'Delete::{trackname}', '---', f'Move Up::{trackname}', f'Move Down::{trackname}'] 
-    menu[1][1].extend([trackname, trackmenu])
+def track_add(name, window, trackcnt):
+    trackmenu = [f'Delete::{name}', '---', f'Move Up::{name}', f'Move Down::{name}'] 
+    menu[1][1].extend([name, trackmenu])
     window['MENU'].update(menu_definition=menu)
 
 def track_index(item):
@@ -68,7 +68,7 @@ while True:
     if event in(None, 'Exit'):
         break
     if event == 'Add Track':
-        track_add(window, trackcnt)
+        track_add(values['TRACK'], window, trackcnt)
         tracks = tracks_list(menu)
     if event in tracks:
         print(event, values)
