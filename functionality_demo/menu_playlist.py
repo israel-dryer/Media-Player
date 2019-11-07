@@ -23,7 +23,7 @@ def tracks_list(menu):
     playlist = menu[1][1]
     return [track for track in playlist if isinstance(track, str)]
 
-def track_add(name, window, trackcnt):
+def track_add(name, window):
     trackmenu = [f'Delete::{name}', '---', f'Move Up::{name}', f'Move Down::{name}'] 
     menu[1][1].extend([name, trackmenu])
     window['MENU'].update(menu_definition=menu)
@@ -61,14 +61,13 @@ def track_mv_down(track):
         menu[1][1].insert(ix+3, mv_track[1])        
 
 tracks = tracks_list(menu)
-trackcnt = iter(range(4, 100))
 
 while True:
     event, values = window.read()
     if event in(None, 'Exit'):
         break
     if event == 'Add Track':
-        track_add(values['TRACK'], window, trackcnt)
+        track_add(values['TRACK'], window)
         tracks = tracks_list(menu)
     if event in tracks:
         print(event, values)
