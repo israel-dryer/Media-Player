@@ -29,24 +29,19 @@ def create_media_player(window):
 
 def add_media(url, window, media_list, instance):
     """ add new media to playlist """
-    if "://" in url:
-        # get location of url
+    try:
         vid = pafy.new(url)
         best = vid.getbest()
         media = instance.media_new(best.url)
-        # set vlc meta data from pafy object
         media.set_meta(0, vid.title)
         media.set_meta(1, vid.author)
-        media.set_meta(6, vid.description)
-        media.set_meta(10, url)
-    else:
+    except:
         media = instance.media_new(url)
         media.set_meta(0, url.replace('\\','/').split('/').pop()) # filename
         media.set_meta(1, 'Local Media')
-        media.set_meta(6, 'Unknown')
+    finally:
         media.set_meta(10, url)
-    # add new media to playlist
-    media_list.add_media(media)
+        media_list.add_media(media)
 
 def track_meta(meta_type, player):
     """ retrieve meta data on current item """
