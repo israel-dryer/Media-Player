@@ -1,7 +1,5 @@
 """
-    Bare Bones Media Player with Playlist
-    Uses the VLC player to playback local and online media.
-    
+    Bare Bones Media Player with Playlist.Uses VLC player to playback local and online media.
     Author      :   Israel Dryer
     Modified    :   2019-11-11
 """
@@ -9,8 +7,6 @@ import vlc
 import pafy
 import PySimpleGUI as sg
 from sys import platform as PLATFORM
-
-sg.change_look_and_feel('DarkBlue')
 
 # ----- MEDIA PLAYER ---------------------------------------------------------
 def create_media_player(window):
@@ -57,7 +53,7 @@ def track_next(list_player):
     list_player.play()
 
 def track_previous(list_player):
-    list_player.previous() # return to beg of current track
+    list_player.previous().previous() # return to beg of current track
     list_player.previous() # go to prior track
     list_player.play() # begin play of prior track
 
@@ -98,6 +94,7 @@ def create_gui():
 
 if __name__ == '__main__':
     # create media player objects
+    sg.change_look_and_feel('DarkBlue')
     window = create_gui()
     instance, list_player, media_list, player = create_media_player(window)
 
