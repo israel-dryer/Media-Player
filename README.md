@@ -28,8 +28,9 @@ On Windows, you also need to download the VLC version that cooresponds to your v
 https://get.videolan.org/vlc/3.0.8/win64/vlc-3.0.8-win64.exe  
 
 
-Here are examples on **Linux** and **Windows** 
-![](images/examples/mini_player5.PNG) ![](images/examples/mini_player6.PNG)
+Here are examples on **Linux** and **Windows**  
+![](images/examples/mini_player5.PNG)  
+![](images/examples/mini_player6.PNG)
 
 
 ## Standard Player (in progress)
