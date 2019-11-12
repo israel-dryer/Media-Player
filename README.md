@@ -3,6 +3,8 @@ Media players built with PySimpleGUI that will play local music and video files,
 
 There currently two versions of the media-player. A scaled down **mini-player** and a more full scale **media player** that is still in progress. Both are meant to be 'proof-of-concept' and for instructional purposes and are not meant to be the end-all application with fully implemented error-handling, etc... Please feel free to take this code and customize to your heart's content.  
 
+[download the code](mini_player.py)
+
 
 ## Mini-Player 
 This is a minimalist player that can play both local and online media files (ex. YouTube). Click the LOAD button to load the file or link into a playlist, which you can then traverse with the PREVIOUS and NEXT buttons. This works on both Linux and Windows. Haven't tried Mac, but let me know...  
