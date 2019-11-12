@@ -1,7 +1,6 @@
-"""
-    Bare Bones Media Player with Playlist.Uses VLC player to playback local and online media.
-    Author      :   Israel Dryer
-    Modified    :   2019-11-11
+"""     Mini VLC media player for local and online streaming media
+        Author:     Israel Dryer
+        Modified:   2019-11-11
 """
 import vlc
 import pafy
@@ -15,16 +14,14 @@ def create_media_player(window):
     media_list = instance.media_list_new([])
     list_player.set_media_list(media_list)
     player = list_player.get_media_player()
-    
+    # platform specific adjustments to window handler
     if PLATFORM.startswith('linux'):
         player.set_xwindow(window['VID_OUT'].Widget.winfo_id())
     else:
         player.set_hwnd(window['VID_OUT'].Widget.winfo_id())
-
     return (instance, list_player, media_list, player)
 
 def add_media(url, window, media_list, instance):
-    """ add new media to playlist """
     try:
         vid = pafy.new(url)
         best = vid.getbest()
@@ -40,22 +37,8 @@ def add_media(url, window, media_list, instance):
         media_list.add_media(media)
 
 def track_meta(meta_type, player):
-    """ retrieve meta data on current item """
-    try:
-        media = player.get_media()
-        meta = media.get_meta(meta_type)
-        return meta
-    except:
-        return
-
-def track_next(list_player):
-    list_player.next()
-    list_player.play()
-
-def track_previous(list_player):
-    list_player.previous().previous() # return to beg of current track
-    list_player.previous() # go to prior track
-    list_player.play() # begin play of prior track
+    media = player.get_media()
+    return media.get_meta(meta_type)
 
 def track_load(values, window, media_list, instance):
     new_media = values['SUBMIT_NEW']
@@ -64,8 +47,7 @@ def track_load(values, window, media_list, instance):
         window['SUBMIT_NEW'].update('URL or Local Path:')
 
 def track_info(window, player):
-    """ show channel, title, and elasped time if there is a video loaded and 
-        the player is playing """
+    """ show channel, title, and elasped time if video is loaded and playing """
     time_elapsed = divmod(player.get_time()//1000, 60)
     time_total = divmod(player.get_length()//1000, 60)
     time_format = "{:02d}:{:02d} / {:02d}:{:02d}".format(*time_elapsed, *time_total)
@@ -84,23 +66,20 @@ def btn(name):
 def create_gui():
     layout = [
         [sg.Input(default_text='URL or Local Path:', size=(30, 1), key='SUBMIT_NEW'), btn('load')],
-        [sg.Image('', size=(300, 170), key='VID_OUT')],
+        [sg.Image('', size=(426, 240), key='VID_OUT')],
         [btn('previous'), btn('play'), btn('next'), btn('pause'), btn('stop')],
         [sg.Text('Load media to start', size=(40, 2), justification='center', font=(sg.DEFAULT_FONT, 10), key='INFO')]]
-
-    window = sg.Window('Mini Player', layout, element_justification='center', finalize=True)
-    return window
-
+    return sg.Window('Mini Player', layout, element_justification='center', finalize=True)
 
 if __name__ == '__main__':
-    # create media player objects
+    # media player object
     sg.change_look_and_feel('DarkBlue')
     window = create_gui()
     instance, list_player, media_list, player = create_media_player(window)
-
+    
+    # main event loop
     while True:
-        event, values = window.read(timeout=100)
-
+        event, values = window.read(timeout=1000)
         if event is None:
             break
         if event == 'PLAY':
@@ -108,10 +87,13 @@ if __name__ == '__main__':
         if event == 'PAUSE':
             list_player.pause()
         if event == 'NEXT':
-            track_next(list_player)
+            list_player.next()
+            list_player.play()
         if event == 'PREVIOUS':
-            track_previous(list_player)
+            list_player.previous().previous() # return to beg of current track
+            list_player.previous() # go to prior track
+            list_player.play() # begin play of prior track
         if event == 'LOAD':
             track_load(values, window, media_list, instance)
-        
+        # update track into with every timeout            
         track_info(window, player)
