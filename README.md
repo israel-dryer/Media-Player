@@ -27,9 +27,10 @@ pip install pysimplegui
 On Windows, you also need to download the VLC version that cooresponds to your version of Windows (32/64bit)  
 https://get.videolan.org/vlc/3.0.8/win64/vlc-3.0.8-win64.exe  
 
-
-Here are examples on **Linux** and **Windows**  
+Running on **Windows**  
 ![](images/examples/mini_player5.PNG)  
+  
+Running on **Linux**  
 ![](images/examples/mini_player6.PNG)
 
 
