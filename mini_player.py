@@ -1,7 +1,7 @@
 """     
     Mini VLC media player for local and online streaming media
     Author      :   Israel Dryer
-    Modified    :   2019-11-12                                           
+    Modified    :   2019-11-21                                           
 """
 import vlc
 import pafy
@@ -74,7 +74,7 @@ def create_gui():
     """ create media player gui to handle vlc media player output """
     layout = [
         [sg.Input(default_text='URL or Local Path:', size=(30, 1), key='SUBMIT_NEW'), btn('load')],
-        [sg.Image('', size=(426, 240), key='VID_OUT')],
+        [sg.Image('images/default.png', size=(426, 240), key='VID_OUT')],
         [btn('previous'), btn('play'), btn('next'), btn('pause'), btn('stop')],
         [sg.Text('LOAD media to Start', size=(40, 2), justification='center', font=(sg.DEFAULT_FONT, 10), key='INFO')]]
     return sg.Window('Mini Player', layout, element_justification='center', finalize=True)
