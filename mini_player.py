@@ -1,13 +1,12 @@
 """     
     Mini VLC media player for local and online streaming media
     Author      :   Israel Dryer
-    Modified    :   2019-11-21                                           
+    Modified    :   2019-11-22   
 """
-import vlc
-import pafy
 import PySimpleGUI as sg
 from sys import platform as PLATFORM
-sg.change_look_and_feel('DarkBlue')
+import vlc
+import pafy
 
 # ----- MEDIA PLAYER ---------------------------------------------------------
 def create_media_player(window):
@@ -24,60 +23,55 @@ def create_media_player(window):
         player.set_hwnd(window['VID_OUT'].Widget.winfo_id())
     return (instance, list_player, media_list, player)
 
-def add_media(url, window, media_list, instance):
+def add_media(window, media_list, instance, list_player):
     """ add new track to list player with meta data if available """
+    url = sg.PopupGetFile('Browse for local media or enter URL:', title='Load Media')
+    if url is None:
+        return
     try:
         vid = pafy.new(url)
         media = instance.media_new(vid.getbest().url)
         media.set_meta(0, vid.title)
-        media.set_meta(1, vid.author)
     except:
         media = instance.media_new(url)
         media.set_meta(0, url.replace('\\','/').split('/').pop()) # filename
-        media.set_meta(1, 'Local Media')
     finally:
-        media.set_meta(10, url)
         media_list.add_media(media)
-
-def track_meta(meta_type, player):
-    """ retrieve saved meta data from tracks in media list """
-    media = player.get_media()
-    return media.get_meta(meta_type)
-
-def track_load(values, window, media_list, instance):
-    """ add new track from url or path in user input element """
-    new_media = values['SUBMIT_NEW']
-    if not 'URL' in new_media and new_media != '':
-        add_media(new_media, window, media_list, instance)
-        window['SUBMIT_NEW'].update('URL or Local Path:')
+        if media_list.count() == 1:
+            list_player.play()
 
 def track_info(window, player):
     """ show author, title, and elasped time if video is loaded and playing """
-    time_elapsed = divmod(player.get_time()//1000, 60)
-    time_total = divmod(player.get_length()//1000, 60)
-    time_format = "{:02d}:{:02d} / {:02d}:{:02d}".format(*time_elapsed, *time_total)
-    # update the track info based on load and play status
+    time_elapsed = "{:02d}:{:02d}".format(*divmod(player.get_time()//1000, 60))
+    time_total = "{:02d}:{:02d}".format(*divmod(player.get_length()//1000, 60))
     if player.is_playing():
-        message = "{} | {}\n{}".format(track_meta(1, player), time_format, track_meta(0, player))
-        window['INFO'].update(message)
-    elif media_list.count() == 0:
-        window['INFO'].update('LOAD media to Start')
+        window['INFO'].update("{}".format(player.get_media().get_meta(0)))
+        window['ELAPSED'].update(time_elapsed)
+        window['TIME'].update(player.get_position())
+        window['REMAINS'].update(time_total)
     else:
-        window['INFO'].update('Press PLAY to Start')
+        try:
+            window['INFO'].update("{}".format(player.get_media().get_meta(0)))
+        except:
+            window['INFO'].update('LOAD media to Start')
 
 # ----- GUI ------------------------------------------------------------------
-def btn(name):
-    """ create gui buttons with standard parameters """
-    return sg.Button(name, size=(6, 1), pad=(1, 1), key=name.upper())
+def btn(name, **kwargs):
+    return sg.Button(name, size=(7, 1), pad=(1, 1), key=name.upper(), **kwargs)
 
 def create_gui():
     """ create media player gui to handle vlc media player output """
-    layout = [
-        [sg.Input(default_text='URL or Local Path:', size=(30, 1), key='SUBMIT_NEW'), btn('load')],
-        [sg.Image('images/default.png', size=(426, 240), key='VID_OUT')],
-        [btn('previous'), btn('play'), btn('next'), btn('pause'), btn('stop')],
-        [sg.Text('LOAD media to Start', size=(40, 2), justification='center', font=(sg.DEFAULT_FONT, 10), key='INFO')]]
-    return sg.Window('Mini Player', layout, element_justification='center', finalize=True)
+    sg.change_look_and_feel('DarkBlue')
+    layout = [[sg.Text('LOAD media to Start', size=(40, 1), justification='left', font=(sg.DEFAULT_FONT, 10), key='INFO')],
+              [sg.Image('images/default.png', size=(426, 240), key='VID_OUT')],
+              [sg.Text('00:00', key='ELAPSED'), 
+               sg.Slider(range=(0, 1), enable_events=True, resolution=0.0001, disable_number_display=True, background_color='#83D8F5', orientation='h', key='TIME'),
+               sg.Text('00:00', key='REMAINS')],
+              [btn('previous'), btn('play'), btn('next'), btn('pause'), btn('stop'), btn('media', button_color=('#000000','#7EE8F5'), focus=True)]]
+    window = sg.Window('Mini Player', layout, element_justification='center', finalize=True)
+    window['TIME'].expand(expand_x=True)  
+    window['INFO'].expand(expand_x=True)
+    return window
 
 if __name__ == '__main__':
     window = create_gui()
@@ -95,5 +89,11 @@ if __name__ == '__main__':
             list_player.next()
         if event == 'PREVIOUS':
             list_player.previous()
-        if event == 'LOAD':
-            track_load(values, window, media_list, instance)
+        if event == 'MEDIA':
+            add_media(window, media_list, instance, list_player)
+        if event == 'STOP':
+            player.stop()
+            window['ELAPSED'].update('00:00')
+        if event == 'TIME':
+            player.set_position(values['TIME'])
+            window['ELAPSED'].update("{:02d}:{:02d}".format(*divmod(int(player.get_length()*values['TIME'])//1000, 60)))
