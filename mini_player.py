@@ -46,9 +46,9 @@ def track_info(window, player):
     time_total = "{:02d}:{:02d}".format(*divmod(player.get_length()//1000, 60))
     if player.is_playing():
         window['INFO'].update("{}".format(player.get_media().get_meta(0)))
-        window['ELAPSED'].update(time_elapsed)
+        window['TIME_ELAPSED'].update(time_elapsed)
         window['TIME'].update(player.get_position())
-        window['REMAINS'].update(time_total)
+        window['TIME_TOTAL'].update(time_total)
     else:
         try:
             window['INFO'].update("{}".format(player.get_media().get_meta(0)))
@@ -64,9 +64,9 @@ def create_gui():
     sg.change_look_and_feel('DarkBlue')
     layout = [[sg.Text('LOAD media to Start', size=(40, 1), justification='left', font=(sg.DEFAULT_FONT, 10), key='INFO')],
               [sg.Image('images/default.png', size=(426, 240), key='VID_OUT')],
-              [sg.Text('00:00', key='ELAPSED'), 
+              [sg.Text('00:00', key='TIME_ELAPSED'), 
                sg.Slider(range=(0, 1), enable_events=True, resolution=0.0001, disable_number_display=True, background_color='#83D8F5', orientation='h', key='TIME'),
-               sg.Text('00:00', key='REMAINS')],
+               sg.Text('00:00', key='TIME_TOTAL')],
               [btn('previous'), btn('play'), btn('next'), btn('pause'), btn('stop'), btn('media', button_color=('#000000','#7EE8F5'), focus=True)]]
     window = sg.Window('Mini Player', layout, element_justification='center', finalize=True)
     window['TIME'].expand(expand_x=True)  
@@ -93,7 +93,7 @@ if __name__ == '__main__':
             add_media(window, media_list, instance, list_player)
         if event == 'STOP':
             player.stop()
-            window['ELAPSED'].update('00:00')
+            window['TIME_ELAPSED'].update('00:00')
         if event == 'TIME':
             player.set_position(values['TIME'])
-            window['ELAPSED'].update("{:02d}:{:02d}".format(*divmod(int(player.get_length()*values['TIME'])//1000, 60)))
+            window['TIME_ELAPSED'].update("{:02d}:{:02d}".format(*divmod(int(player.get_length()*values['TIME'])//1000, 60)))
