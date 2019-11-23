@@ -39,12 +39,12 @@ Running on **Linux**
 ## Standard Player (in progress)
 A fully functional media player that plays both local and streaming media.  
 
-![](images/examples/example11.PNG)  
-![](images/examples/example12.PNG) 
+![](images/examples/example15.PNG)  
+![](images/examples/example14.PNG) 
 
-I'm working on a playlist builder. It currently launches, and works as far as building goes, but it's not yet connected for playing videos.  
+I'm working on a playlist builder. At the moment, you can continue to load new files or urls through the file menu and it will build a playlist. You can also **create a playlist from a text file** by navigating to **Playlist > Create from File**  
 
-![](images/examples/example13.PNG) 
+![](images/examples/playlist_txt.PNG)  
 
 A screenshot of an ealier version running on a Raspberry Pi 3B+, Python 3.7.  
 
