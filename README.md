@@ -30,9 +30,11 @@ On Windows, you also need to download the VLC version that cooresponds to your v
 https://get.videolan.org/vlc/3.0.8/win64/vlc-3.0.8-win64.exe  
 
 Running on **Windows**  
+
 ![](images/examples/mini_player7.PNG)  
   
 Running on **Linux**  
+
 ![](images/examples/mini_player8.PNG)
 
 
