@@ -1,14 +1,13 @@
 """     
     VLC media player for local and online streaming media
     Author      :   Israel Dryer
-    Modified    :   2019-11-23                                          
+    Modified    :   2019-11-30
 """
 import vlc
 import pafy
 import PySimpleGUI as sg
 from sys import platform as PLATFORM
 from os import listdir
-from collections import namedtuple
 
 # ----- MISC DEFAULT SETTINGS ------------------------------------------------
 WINDOW_SIZE = (1280, 720)
@@ -42,7 +41,7 @@ def create_media_player(window):
     return (instance, list_player, media_list, player)
 
 
-def add_media(instance, list_player, media_list):
+def add_media(instance, list_player, media_list, window):
     """ add new track to list player with meta data if available """
     global track_num, track_cnt
     url = sg.PopupGetFile('Browse for local media or enter URL:', title='Load Media')
@@ -53,10 +52,12 @@ def add_media(instance, list_player, media_list):
         media = instance.media_new(vid.getbest().url)
         media.set_meta(0, vid.title)
         media.set_meta(1, vid.author)
+        playlist_menu_add_track(vid.title)
     except:
         media = instance.media_new(url)
         media.set_meta(0, url.replace('\\','/').split('/').pop()) # filename
         media.set_meta(1, 'Local Media')
+        playlist_menu_add_track('Local Media')
     finally:
         media.set_meta(10, url)
         media_list.add_media(media)
@@ -138,7 +139,7 @@ def toggle_sound(window, player):
 
 # ----- PLAYLIST -------------------------------------------------------------
 
-def playlist_create_from_file(instance):
+def playlist_create_from_file(instance, window):
     """ open text file and load to new media list """
     global track_cnt, track_num, media_list, list_player
     filename = sg.popup_get_file('navigate to playlist', title='Create New Playlist', no_window=True)
@@ -157,10 +158,12 @@ def playlist_create_from_file(instance):
                 media = instance.media_new(vid.getbest().url)
                 media.set_meta(0, vid.title)
                 media.set_meta(1, vid.author)
+                playlist_menu_add_track(vid.title)
             except:
                 media = instance.media_new(url)
                 media.set_meta(0, url.replace('\\','/').split('/').pop()) # filename
                 media.set_meta(1, 'Local Media')
+                playlist_menu_add_track('Local Media')
             finally:
                 media.set_meta(10, url)
                 media_list.add_media(media)
@@ -168,24 +171,30 @@ def playlist_create_from_file(instance):
         track_cnt = media_list.count()
         list_player.set_media_list(media_list)
         track_num = 1                
+        window['MENU'].update(menu_definition=menu)
         list_player.play()
 
 
+def playlist_menu_add_track(name):
+    global menu
+    menu[2][1][1].extend([name])
+
+
 # ----- GUI ------------------------------------------------------------------
+menu = [
+    ['File', ['Load &Media', 'Load &Playlist', '---', 'Exit']],
+    ['Controls', ['Play', 'Pause', 'Stop','---','Skip Next', 'Skip Previous']],
+    ['Playlist', ['Active Playlist', ['---'], '---', 'Save New Playlist', 'Create from File', 'Edit Active Playlist']],
+    ['Library', ['Edit Library']],
+    ['About']]
+
 def btn(key, image):
     ''' create player buttons '''
     return sg.Button(image_filename=image, border_width=0, pad=(0, 0), key=key, button_color=('white', DEFAULT_BG_COLOR))
 
 
-def create_gui():
+def create_gui(menu):
     ''' create a gui instance '''
-    menu_layout = [
-        ['File', ['Load &Media', 'Load &Playlist', '---', 'Exit']],
-        ['Controls', ['Play', 'Pause', 'Stop','---','Skip Next', 'Skip Previous']],
-        ['Playlist', ['Active Playlist', '---', 'Save New Playlist', 'Create from File', 'Edit Active Playlist']],
-        ['Library', ['Edit Library']],
-        ['About']]
-
     col1 = [
         [btn('SKIP PREVIOUS', BUTTONS['START']), btn('PAUSE', BUTTONS['PAUSE_OFF']), 
          btn('PLAY', BUTTONS['PLAY_OFF']), btn('STOP', BUTTONS['STOP']), 
@@ -194,12 +203,12 @@ def create_gui():
     col2 = [[sg.Text('Open a FILE, STREAM, or PLAYLIST to begin', size=(45, 3), font=(sg.DEFAULT_FONT, 8), pad=(0, 5), key='INFO')]]
 
     main_layout = [
-        [sg.Menu(menu_layout)],
+        [sg.Menu(menu, key='MENU')],
         [sg.Image(filename=DEFAULT_IMG, pad=(0, 5), size=VIDEO_SIZE, key='VID_OUT')],
         [sg.Text('00:00', key='TIME_ELAPSED'), 
          sg.Slider(range=(0, 1), enable_events=True, resolution=0.0001, disable_number_display=True, background_color='#83D8F5', orientation='h', key='TIME'),
          sg.Text('00:00', key='TIME_TOTAL'),
-         sg.Text('__ of __', key='TRACKS')], 
+         sg.Text('        ', key='TRACKS')], 
         [sg.Column(col1), sg.Column(col2)]]
     
     window = sg.Window('VLC Media Player', main_layout, element_justification='center', finalize=True)
@@ -208,7 +217,7 @@ def create_gui():
 
 
 if __name__ == '__main__':
-    window = create_gui()
+    window = create_gui(menu)
     instance, list_player, media_list, player = create_media_player(window)
     track_num, track_cnt = (0, 0)
     while True:
@@ -231,8 +240,8 @@ if __name__ == '__main__':
         if event == 'TIME':
             player.set_position(values['TIME'])
         if event == 'Load Media':
-            add_media(instance, list_player, media_list)
+            add_media(instance, list_player, media_list, window)
         if event == 'Create from File':
-            playlist_create_from_file(instance)
+            playlist_create_from_file(instance, window)
         else:
             print(event, values)
