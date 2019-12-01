@@ -1,7 +1,7 @@
 """     
     VLC media player for local and online streaming media
     Author      :   Israel Dryer
-    Modified    :   2019-11-23                                          
+    Modified    :   2019-11-30                                         
 """
 import vlc
 import pafy
