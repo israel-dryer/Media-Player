@@ -37,6 +37,7 @@ class MediaPlayer:
 
         self.window = self.create_window()
         self.__adjust_for_platform()
+        self.tracks = self.tracks_list()
 
 
     def __button(self, key, image):
@@ -157,15 +158,15 @@ class MediaPlayer:
 
 
     def skip_next(self):
+        self.list_player.next()
         if not self.track_cnt == self.track_num:
             self.track_num +=1
-        self.list_player.next()
 
 
     def skip_previous(self):
+        self.list_player.previous()
         if not self.track_num == 1:
             self.track_num -= 1
-        self.list_player.previous()
 
 
     def toggle_sound(self):
@@ -210,7 +211,48 @@ class MediaPlayer:
 
     def playlist_menu_add_track(self, name):
         trackmenu = [f'Delete::{name}', '---', f'Move Up::{name}', f'Move Down::{name}']
-        self.menu[2][1][1].extend([name, trackmenu])        
+        self.menu[2][1][1].extend([name, trackmenu])
+
+
+    def tracks_list(self):
+        """ get a list of tracks from the playlist menu """
+        playlist = self.menu[2][1][1]
+        return [track for track in playlist if isinstance(track, str)]
+
+
+    def track_index(self, item):
+        """ find the index of track """
+        self.tracks = self.tracks_list()
+        return self.tracks.index(item) * 2
+
+
+    def track_delete(self, track):
+        """ delete a track from the playlist """
+        ix = self.track_index(track)
+        del(self.menu[2][1][ix:ix+2])
+
+
+    def track_mv_up(self, track):
+        """ move track up the list """
+        ix = self.track_index(track)
+        mv_track = self.menu[2][1][ix:ix+2]
+        if ix == 0:
+            return
+        else:
+            del(self.menu[1][1][ix:ix+2])
+            self.menu[2][1].insert(ix-2, mv_track[0])
+            self.menu[2][1].insert(ix-1, mv_track[1])
+
+    def track_mv_down(self, track):
+        """ move track down the list """
+        ix = self.track_index(track)
+        mv_track = self.menu[2][1][ix:ix+2]
+        if ix == len(self.menu[2][1])-1:
+            return
+        else:
+            del(self.menu[1][1][ix:ix+2])
+            self.menu[2][1].insert(ix+2, mv_track[0])
+            self.menu[2][1].insert(ix+3, mv_track[1])          
 
 
 if __name__ == '__main__':
@@ -238,5 +280,14 @@ if __name__ == '__main__':
             mp.add_media()
         if event == 'Create from File':
             mp.playlist_create_from_file()
+        if '::' in event:
+            action, track = event.split('::')
+            print(action, track)
+            if action == 'Delete':
+                mp.track_delete(track)
+            if action == 'Move Up':
+                mp.track_mv_up(track)
+            if action == 'Move Down':
+                mp.track_mv_down(track)              
         else:
             print(event, values)
