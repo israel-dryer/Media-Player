@@ -1,15 +1,14 @@
-# Media-Player  
-Media players built with PySimpleGUI that will play local music and video files, and also streaming YouTube videos.  
+# VLC Media Player  
+A media player built with **VLC** & **PySimpleGUI** that will play local and online streaming media. This project is primarily **educational**, so feel free to take and expand it into something much more dynamic and useful. I've also included some very **basic playlist functionality** for convenience.  
 
-There currently two versions of the media-player. A scaled down **mini-player** and a more full scale **media player** that is still in progress. Both are meant to be 'proof-of-concept' and for instructional purposes and are not meant to be the end-all application with fully implemented error-handling, etc... Please feel free to take this code and customize to your heart's content.  
+##### Other Resources:  
+- I've created a [quick-start tutorial](Python-VLC-Quick-Start.ipynb) on how to use the Python-VLC library that covers all of the basic classes and methods used to build this application as well as some others that I haven't included.  
 
-[download the code](mini_player.py)
+- [Here's a demonstration](https://github.com/oaubert/python-vlc/blob/master/examples/tkvlc.py) that I found online using tkinter; it's a not pretty, but the code was very insightful and much more robust than what you'll find here.  
 
 
-## Mini-Player 
-This is a minimalist player that can play both local and online media files (ex. YouTube). Click the LOAD button to load the file or link into a playlist, which you can then traverse with the PREVIOUS and NEXT buttons. This works on both Linux and Windows. Haven't tried Mac, but let me know...  
-
-Getting start with Linux:  
+### Getting start with Linux:  
+Before running this application on Linux, please make sure you install the following libraries and applications.
 ```
 sudo pip3 install python-vlc
 sudo pip3 install youtube-dl
@@ -18,7 +17,9 @@ sudo pip3 install pafy
 sudo apt-get install vlc
 ```
 
-Getting start with Windows:
+### Getting start with Windows:
+Before running this application on Windows, please make sure you install the following libraries and applications. Additionally, On Windows, you also need to download the VLC version that cooresponds to [32 or 64 bit Windows](https://www.videolan.org/vlc/)   
+
 ```
 pip install python-vlc
 pip install pafy
@@ -26,63 +27,28 @@ pip install youtube-dl
 pip install pysimplegui
 ```
 
-On Windows, you also need to download the VLC version that cooresponds to your version of Windows (32/64bit)  
-https://get.videolan.org/vlc/3.0.8/win64/vlc-3.0.8-win64.exe  
+### Playlist  
+I've added some functionality that will allow you to load a playlist via a `playlist.txt` file that must be included in the same directly as the `mini_player_oop.py` script. As you can see from the example image, you can include both local files and url links to streaming media. Spaces between lines do not affect the program, but I didn't take the time to allow for comments, or saving of a playlist. Feel free to add that.
 
-Running on **Windows**  
-
-![](images/examples/mini_player7.PNG)  
-  
-Running on **Linux**  
-
-![](images/examples/mini_player8.PNG)
+If you have loaded a playlist, any additional media that you load will be appended to the `media_list` object and so will be available in the current session, but it does not add the track to the `playlist.txt` file.  
+![](Examples/playlist.png)
 
 
-## Standard Player (in progress)
-A fully functional media player that plays both local and streaming media.  
+### Running on **Windows**    
+Startup screen  
 
-![](images/examples/example15.PNG)  
-![](images/examples/example14.PNG) 
+![](Examples/startup.png)  
 
-I'm working on a playlist builder. At the moment, you can continue to load new files or urls through the file menu and it will build a playlist. You can also **create a playlist from a text file** by navigating to **Playlist > Create from File**  
+Playing media - GREEN indicates item is playing  
 
-![](images/examples/playlist_txt.PNG)  
+![](Examples/playing1.png)
 
-A screenshot of an ealier version running on a Raspberry Pi 3B+, Python 3.7.  
+Paused media - RED is paused  
 
-![](images/examples/example10_rpi_buster.PNG)
+![](Examples/paused.PNG)  
+
+### Running on **Linux (Raspberry Pi // Rasbian Buster**  
+
+![](Examples/playing2.png)
 
 
-Getting start with Linux:  
-```
-sudo pip3 install python-vlc
-sudo pip3 install youtube-dl
-sudo pip3 install pysimplegui
-sudo pip3 install pafy
-sudo apt-get install vlc
-```
-
-Getting start with Windows:
-```
-pip install python-vlc
-pip install youtube-dl
-pip install pysimplegui
-pip install pafy
-```
-
-On Windows, you also need to download the VLC version that cooresponds to your version of Windows (32/64bit)  
-https://get.videolan.org/vlc/3.0.8/win64/vlc-3.0.8-win64.exe  
-
-## Other Resources  
-
-My source for free icons and buttons:   
-https://icons8.com/icon/pack/media-controls/ios-filled
-
-Source I used for the background image (default.png):  
-https://pngtree.com/so/accessory
-
-There's an online tool you can use to encode base64 images:  
-https://base64.guru/converter/encode/image/ico  
-
-Here's a demonstration of the python bindings using tkinter:  
-https://github.com/oaubert/python-vlc/blob/master/examples/tkvlc.py
