@@ -28,9 +28,9 @@ pip install pysimplegui
 ```
 
 ### Playlist  
-I've added some functionality that will allow you to load a playlist via a `playlist.txt` file that must be included in the same directly as the media player script. As you can see from the example image, you can include both local files and url links to streaming media. Spaces between lines do not affect the program, but I didn't take the time to allow for comments, or saving of a playlist. Feel free to add that.
+I've added some functionality that will allow you to load a playlist via a `playlist.txt` file that must be included in the same directory as the media player script. As you can see from the example image, you can include both local files and url links to streaming media. Spaces between lines do not affect the program, but I didn't take the time to allow for comments, or saving of a new playlist within the application itself. Feel free to add that.
 
-If you have loaded a playlist, any additional media that you load will be appended to the `media_list` object and so will be available in the current session, but it does not add the track to the `playlist.txt` file.  
+If you've loaded a playlist, any additional media that you load will be appended to the `media_list` object and will be available to play in the current session, but it does not add the track to the `playlist.txt` file. However, that would be a fairly simple add if someone wanted to do it.
 ![](Examples/playlist.png)
 
 
