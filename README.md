@@ -28,7 +28,7 @@ pip install pysimplegui
 ```
 
 ### Playlist  
-I've added some functionality that will allow you to load a playlist via a `playlist.txt` file that must be included in the same directly as the `mini_player_oop.py` script. As you can see from the example image, you can include both local files and url links to streaming media. Spaces between lines do not affect the program, but I didn't take the time to allow for comments, or saving of a playlist. Feel free to add that.
+I've added some functionality that will allow you to load a playlist via a `playlist.txt` file that must be included in the same directly as the media player script. As you can see from the example image, you can include both local files and url links to streaming media. Spaces between lines do not affect the program, but I didn't take the time to allow for comments, or saving of a playlist. Feel free to add that.
 
 If you have loaded a playlist, any additional media that you load will be appended to the `media_list` object and so will be available in the current session, but it does not add the track to the `playlist.txt` file.  
 ![](Examples/playlist.png)
@@ -37,7 +37,7 @@ If you have loaded a playlist, any additional media that you load will be append
 ### Running on **Windows**    
 Startup screen  
 
-![](Examples/startup.png)  
+![](Examples/startup.PNG)  
 
 Playing media - GREEN indicates item is playing  
 
@@ -49,6 +49,6 @@ Paused media - RED is paused
 
 ### Running on **Linux (Raspberry Pi // Rasbian Buster**  
 
-![](Examples/playing2.png)
+![](Examples/playing2.PNG)
 
 
